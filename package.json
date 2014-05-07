@@ -1,0 +1,27 @@
+{
+  "name": "ghi",
+  "version": "0.0.1",
+  "description": "GitHub Interface",
+  "private": false,
+  "bin": {
+    "ghi": "./bin/ghi"
+  },
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "author": {
+    "name": "Phillip Alexander",
+    "email": "git@phillipalexander.io",
+    "url": "phillipalexander.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/phillipalexander/ghi"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "commander": "~2.0.0"
+  },
+  "devDependencies": {
+  }
+}
