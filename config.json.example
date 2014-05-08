@@ -1,5 +1,6 @@
 {
   "github": {
-    "token": "YOUR_OAUTH_TOKEN_GOES_HERE"
+    "token": "OAUTH_TOKEN",
+    "webhook": "WEBHOOK_CONFIG_OBJECT"
   }
 }

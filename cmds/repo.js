@@ -56,7 +56,7 @@ module.exports = function(program) {
                 if(res.ok) {
                   console.log("url: " + res.body.html_url);
                 } else {
-                  console.log(res.body)
+                  console.log(res.body);
                 }
               });
           }
@@ -79,10 +79,33 @@ module.exports = function(program) {
           if(res.ok) {
             console.log("...annnnd, it's gone.");
           } else {
-            console.log(res.body)
+            console.log(res.body);
           }
         });
 
     });
+
+  program
+    .command('hc <fullname>')
+    .version('0.0.1')
+    .description('Create a webhook on a repo')
+    .action(function(fullname){
+      var org = fullname.split("/")[0];
+      var repo = fullname.split("/")[1];
+
+      request
+        .post("https://api.github.com/repos/" + org + "/" + repo + "/hooks")
+        .query({access_token: config.github.token})
+        .set('Content-Type', 'application/json')
+        .send(config.github.webhook)
+        .end(function(res) {
+          if(res.ok) {
+            console.log("webhook set");
+          } else {
+            console.log(res.body);
+          }
+        });
+
+    })
 
 };
