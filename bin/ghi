@@ -2,12 +2,14 @@
 'use strict';
 
 var program  = require('commander');
-
+var config = require('../config.json');
 
 
 
 program
 	.version('0.0.1');
+
+require('autocmdr/lib/config.js')(program);
 
 
 program
