@@ -55,8 +55,31 @@ module.exports = function(program) {
               .end(function(res) {
                 if(res.ok) {
                   console.log("url: " + res.body.html_url);
+                } else {
+                  console.log(res.body)
                 }
               });
+          }
+        });
+    });
+
+  program
+    .command("rd <fullname>")
+    .version("0.0.1")
+    .description("Destroy repo on GitHub")
+    .action(function(fullname) {
+      var org = fullname.split("/")[0];
+      var repo = fullname.split("/")[1];
+
+      request
+        .del("https://api.github.com/repos/" + org + "/" + repo)
+        .query({access_token: config.github.token})
+        .set('Content-Type', 'application/json')
+        .end(function(res) {
+          if(res.ok) {
+            console.log("...annnnd, it's gone.");
+          } else {
+            console.log(res.body)
           }
         });
 
