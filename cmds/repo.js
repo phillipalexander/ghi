@@ -46,9 +46,23 @@ module.exports = function(program) {
         .end(function(res) {
           if(res.ok) {
             console.log("url: " + res.body.html_url);
+            // set webhook (only on org)
+            request
+              .post("https://api.github.com/repos/" + owner + "/" + repo + "/hooks")
+              .query({access_token: config.github.token})
+              .set('Content-Type', 'application/json')
+              .send(config.github.webhook)
+              .end(function(res) {
+                if(res.ok) {
+                  console.log("webhook set");
+                } else {
+                  console.log(res.body);
+                }
+              });
             console.log("opening url in browser...");
             open(res.body.html_url);
           } else if (res.notFound) {
+
             // if creating as an org fails, try as user
             request
               .post("https://api.github.com/user/repos")
@@ -95,16 +109,17 @@ module.exports = function(program) {
     .version('0.0.1')
     .description('Create a webhook on a repo')
     .action(function(fullname){
-      var org = fullname.split("/")[0];
+      var owner = fullname.split("/")[0];
       var repo = fullname.split("/")[1];
 
       request
-        .post("https://api.github.com/repos/" + org + "/" + repo + "/hooks")
+        .post("https://api.github.com/repos/" + owner + "/" + repo + "/hooks")
         .query({access_token: config.github.token})
         .set('Content-Type', 'application/json')
         .send(config.github.webhook)
         .end(function(res) {
           if(res.ok) {
+            var hookId = res.body.id;
             console.log("webhook set");
           } else {
             console.log(res.body);
