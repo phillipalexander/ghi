@@ -27,17 +27,20 @@ module.exports = function(program) {
     .action(function(fullname) {
       var owner = fullname.split("/")[0];
       var repo = fullname.split("/")[1];
+      var repoData = {
+        name: repo,
+        private: true,
+        has_issues: false,
+        has_wiki: false,
+        auto_init: false
+      };
 
       // first try as org
       request
         .post("https://api.github.com/orgs/" + owner + "/repos")
         .query({access_token: config.github.token})
         .set('Content-Type', 'application/json')
-        .send({name: repo})
-        .send({private: true})
-        .send({has_issues: false})
-        .send({has_wiki: false})
-        .send({auto_init: false})
+        .send(repoData)
         .end(function(res) {
           if(res.ok) {
             console.log("url: " + res.body.html_url);
@@ -47,11 +50,7 @@ module.exports = function(program) {
               .post("https://api.github.com/user/repos")
               .query({access_token: config.github.token})
               .set('Content-Type', 'application/json')
-              .send({name: repo})
-              .send({private: true})
-              .send({has_issues: false})
-              .send({has_wiki: false})
-              .send({auto_init: false})
+              .send(repoData)
               .end(function(res) {
                 if(res.ok) {
                   console.log("url: " + res.body.html_url);
