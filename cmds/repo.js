@@ -6,6 +6,7 @@
 var request = require("superagent");
 var fs = require('fs');
 var path = require('path');
+var open = require('open');
 
 var config;
 
@@ -24,6 +25,7 @@ module.exports = function(program) {
     .command("rc <fullname>")
     .version("0.0.1")
     .description("Create repo on GitHub")
+    // create repo
     .action(function(fullname) {
       var owner = fullname.split("/")[0];
       var repo = fullname.split("/")[1];
@@ -44,6 +46,8 @@ module.exports = function(program) {
         .end(function(res) {
           if(res.ok) {
             console.log("url: " + res.body.html_url);
+            console.log("opening url in browser...");
+            open(res.body.html_url);
           } else if (res.notFound) {
             // if creating as an org fails, try as user
             request
@@ -54,6 +58,8 @@ module.exports = function(program) {
               .end(function(res) {
                 if(res.ok) {
                   console.log("url: " + res.body.html_url);
+                  console.log("opening url in browser...");
+                  open(res.body.html_url);
                 } else {
                   console.log(res.body);
                 }

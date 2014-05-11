@@ -21,7 +21,8 @@
   "license": "MIT",
   "dependencies": {
     "commander": "~2.0.0",
-    "superagent": "~0.18.0"
+    "superagent": "~0.18.0",
+    "open": "0.0.5"
   },
   "devDependencies": {}
 }
