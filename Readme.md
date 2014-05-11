@@ -1,11 +1,11 @@
-ghi
-=============
+# ghi
+GitHub Interface - a minimal command line tool
 
-# Description
+## Description
 
-GitHub Interface
+Simple command line tool created to automate the repetative GitHub operations I perform regularly.
 
-# Usage
+## Installation
 
 To install ghi from npm, run:
 
@@ -13,14 +13,16 @@ To install ghi from npm, run:
 $ npm install -g ghi
 ```
 
-```node ./bin/ghi --help```
+## Usage
 
-# License
+_Coming Soon_
+
+```
+ghi --help
+```
+
+## License
 
 Copyright (c) 2014 Phillip Alexander
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
-
-# Acknowledgments
-
-Built using [generator-commader](https://github.com/Hypercubed/generator-commander).
