@@ -7,6 +7,7 @@ var request = require("superagent");
 var fs = require('fs');
 var path = require('path');
 var open = require('open');
+var _ = require('lodash');
 
 var config;
 
@@ -125,6 +126,34 @@ module.exports = function(program) {
             console.log(res.body);
           }
         });
+
+    })
+
+  program
+    .command('tc <fullname>')
+    .version('0.0.1')
+    .description('Add a repo to an existing repo')
+    .action(function(fullname){
+      var owner = fullname.split("/")[0];
+      var repo = fullname.split("/")[1];
+      var addRepoToTeam = function(team) {
+        request
+          .put("https://api.github.com/teams/" + team.id + "/repos/" + owner + "/" + repo)
+          .query({access_token: config.github.token})
+          .set('Content-Type', 'application/json')
+          .end(function(res) {
+            if(res.ok) {
+              var hookId = res.body.id;
+              console.log(team.name + " granted access");
+            } else {
+              console.log(res.body);
+            }
+          });
+      }
+      for(var i = 0; i < config.github.teams.length; i++) {
+        addRepoToTeam(config.github.teams[i]);
+      }
+      // _.(config.github.teams, addRepoToTeam)
 
     })
 

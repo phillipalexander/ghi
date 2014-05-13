@@ -1,6 +1,9 @@
 {
   "github": {
     "token": "OAUTH_TOKEN",
-    "webhook": "WEBHOOK_CONFIG_OBJECT"
+    "webhook": "WEBHOOK_CONFIG_OBJECT",
+    "teams": [
+      {"name": "TEAM_NAME", "id": "TEAM_ID"}
+    ]
   }
 }
