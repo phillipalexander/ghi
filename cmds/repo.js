@@ -7,7 +7,6 @@ var request = require("superagent");
 var fs = require('fs');
 var path = require('path');
 var open = require('open');
-var _ = require('lodash');
 
 var config;
 
@@ -38,7 +37,7 @@ module.exports = function(program) {
         auto_init: false
       };
 
-      // first try as org
+      // first try to create as org
       request
         .post("https://api.github.com/orgs/" + owner + "/repos")
         .query({access_token: config.github.token})
@@ -47,6 +46,7 @@ module.exports = function(program) {
         .end(function(res) {
           if(res.ok) {
             console.log("url: " + res.body.html_url);
+
             // set webhook (only on org)
             request
               .post("https://api.github.com/repos/" + owner + "/" + repo + "/hooks")
@@ -102,11 +102,10 @@ module.exports = function(program) {
             console.log(res.body);
           }
         });
-
     });
 
   program
-    .command('hc <fullname>')
+    .command('rha <fullname>')
     .version('0.0.1')
     .description('Create a webhook on a repo')
     .action(function(fullname){
@@ -126,11 +125,10 @@ module.exports = function(program) {
             console.log(res.body);
           }
         });
-
     })
 
   program
-    .command('tc <fullname>')
+    .command('rta <fullname>')
     .version('0.0.1')
     .description('Add a repo to an existing repo')
     .action(function(fullname){
@@ -153,8 +151,6 @@ module.exports = function(program) {
       for(var i = 0; i < config.github.teams.length; i++) {
         addRepoToTeam(config.github.teams[i]);
       }
-      // _.(config.github.teams, addRepoToTeam)
-
     })
 
 };
