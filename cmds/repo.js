@@ -130,7 +130,7 @@ module.exports = function(program) {
   program
     .command('rta <fullname>')
     .version('0.0.1')
-    .description('Add a repo to an existing repo')
+    .description('Add a team to an existing repo')
     .action(function(fullname){
       var owner = fullname.split("/")[0];
       var repo = fullname.split("/")[1];
