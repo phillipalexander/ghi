@@ -162,10 +162,11 @@ module.exports = function(program) {
       request
         .get("https://api.github.com/orgs/" + owner + "/teams")
         .query({access_token: config.github.token})
+        .query({per_page: 100})
         .set('Content-Type', 'application/json')
         .end(function(res) {
           if(res.ok) {
-            // TODO: accomodate paginated results. This will only report page 1
+            // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
             var teamArray = res.body;
             var result = [];
             for(var i = 0; i < teamArray.length; i++){
@@ -180,6 +181,42 @@ module.exports = function(program) {
                 }
               }
               result.push(teamObjRedux);
+            }
+            console.log(result);
+          } else {
+            console.log(res.body);
+          }
+        });
+    });
+
+  program
+    .command('rga <org>')
+    .version('0.0.1')
+    .description('Get Teams')
+    .action(function(org){
+      var owner = org;
+      request
+        .get("https://api.github.com/orgs/" + owner + "/repos")
+        .query({access_token: config.github.token})
+        .query({per_page: 100})
+        .set('Content-Type', 'application/json')
+        .end(function(res) {
+          if(res.ok) {
+            // TODO: accomodate paginated results. This will only report page 1
+            var repoArray = res.body;
+            var result = [];
+            for(var i = 0; i < repoArray.length; i++){
+              var repoObj = repoArray[i];
+              var repoObjRedux = {};
+              for (var prop in repoObj) {
+                if (prop === "name") {
+                  repoObjRedux[prop] = repoObj[prop];
+                }
+                if (prop === "id") {
+                  repoObjRedux[prop] = repoObj[prop];
+                }
+              }
+              result.push(repoObjRedux);
             }
             console.log(result);
           } else {
