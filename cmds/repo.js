@@ -153,4 +153,38 @@ module.exports = function(program) {
       }
     })
 
+  program
+    .command('tga <org>')
+    .version('0.0.1')
+    .description('Get Teams')
+    .action(function(org){
+      var owner = org;
+      request
+        .get("https://api.github.com/orgs/" + owner + "/teams")
+        .query({access_token: config.github.token})
+        .set('Content-Type', 'application/json')
+        .end(function(res) {
+          if(res.ok) {
+            var teamArray = res.body;
+            var result = [];
+            for(var i = 0; i < teamArray.length; i++){
+              var teamObj = teamArray[i];
+              var teamObjRedux = {};
+              for (var prop in teamObj) {
+                if (prop === "name") {
+                  teamObjRedux[prop] = teamObj[prop];
+                }
+                if (prop === "id") {
+                  teamObjRedux[prop] = teamObj[prop];
+                }
+              }
+              result.push(teamObjRedux);
+            }
+            console.log(result);
+          } else {
+            console.log(res.body);
+          }
+        });
+    });
+
 };
