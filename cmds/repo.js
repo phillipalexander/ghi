@@ -165,6 +165,7 @@ module.exports = function(program) {
         .set('Content-Type', 'application/json')
         .end(function(res) {
           if(res.ok) {
+            // TODO: accomodate paginated results. This will only report page 1
             var teamArray = res.body;
             var result = [];
             for(var i = 0; i < teamArray.length; i++){
