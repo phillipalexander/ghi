@@ -130,7 +130,7 @@ module.exports = function(program) {
   program
     .command('rta <fullname>')
     .version('0.0.1')
-    .description('Add a team to an existing repo')
+    .description('Add all teams listed in config.json to an existing repo')
     .action(function(fullname){
       var owner = fullname.split("/")[0];
       var repo = fullname.split("/")[1];
@@ -156,7 +156,7 @@ module.exports = function(program) {
   program
     .command('tga <org>')
     .version('0.0.1')
-    .description('Get Teams')
+    .description('Get the first 100 teams associated with an Org')
     .action(function(org){
       var owner = org;
       request
@@ -192,7 +192,7 @@ module.exports = function(program) {
   program
     .command('rga <org>')
     .version('0.0.1')
-    .description('Get Teams')
+    .description('Get the first 100 repos associated with an Org')
     .action(function(org){
       var owner = org;
       request
