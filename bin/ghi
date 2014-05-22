@@ -8,31 +8,31 @@ var path = require('path');
 var config;
 
 if (fs.existsSync(path.join(__dirname, '../config.json'))) {
-	config = require('../config.json');
+  config = require('../config.json');
 } else {
-	console.log('You must set your GitHub token')
-	console.log('Run the following command to create a config.json file, add your token, then try again.')
-	console.log('cp ' + path.join(__dirname, '../config.json.example') + ' ' + path.join(__dirname, '../config.json') + ' && vim ' + path.join(__dirname, '../config.json'))
-	process.exit();
+  console.log('You must set your GitHub token')
+  console.log('Run the following command to create a config.json file, add your token, then try again.')
+  console.log('cp ' + path.join(__dirname, '../config.json.example') + ' ' + path.join(__dirname, '../config.json') + ' && vim ' + path.join(__dirname, '../config.json'))
+  process.exit();
 }
 
 program
-	.version('0.0.1');
+  .version('0.0.1');
 
 require('../cmds/repo.js')(program);
 
 program
-	.on('*', function(name) {
-		console.log('\''+name+'\' is not a known command. See \'ghi --help\':');
-		program.outputHelp();
-		process.exit(1);
-	});
+  .on('*', function(name) {
+    console.log('\''+name+'\' is not a known command. See \'ghi --help\':');
+    program.outputHelp();
+    process.exit(1);
+  });
 
 program
-	.parse(process.argv);
+  .parse(process.argv);
 
 if (program.args.length < 1 ) {
-	console.log('No command specified. See \'ghi --help\':');
-	program.outputHelp();
-	process.exit(1);
+  console.log('No command specified. See \'ghi --help\':');
+  program.outputHelp();
+  process.exit(1);
 }
