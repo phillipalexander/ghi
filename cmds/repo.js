@@ -225,4 +225,47 @@ module.exports = function(program) {
         });
     });
 
+  program
+    .command('uqa')
+    .description('User Quick Add')
+    .option('-o, --org <string>', 'GitHub Org')
+    .option('-t, --team <teamname>', 'GitHub Team')
+    .option('-u, --user <username>', 'GitHub Username')
+    .action(function(options){
+      request
+        .get("https://api.github.com/orgs/" + options.org + "/teams")
+        .query({access_token: config.github.token})
+        .query({per_page: 100})
+        .set('Content-Type', 'application/json')
+        .end(function(res) {
+          if(res.ok) {
+            console.log("...got teams")
+            // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
+            var teamArray = res.body;
+            var teamId;
+            for(var i = 0; i < teamArray.length; i++){
+              var teamObj = teamArray[i];
+              for (var prop in teamObj) {
+                if (teamObj.hasOwnProperty("name") && teamObj.name === options.team) {
+                  teamId = teamObj.id;
+                  break;
+                }
+              }
+            }
+            request
+              .put("https://api.github.com/teams/" + teamId + "/members/" + options.user)
+              .query({access_token: config.github.token})
+              .set('Content-Type', 'application/json')
+              .end(function(res) {
+                if(res.ok) {
+                  console.log("user:" + options.user + " has been added to team:" + options.team + " in org:" + options.org);
+                } else {
+                  console.log(res.body);
+                }
+              });
+          } else {
+            console.log(res.body)
+          }
+        });
+      })
 };
