@@ -20,9 +20,9 @@ if (fs.existsSync(path.join(__dirname, '../config.json'))) {
   process.exit();
 }
 
-var getTeamId = function getTeamId(teamName, callback) {
+var getTeamId = function getTeamId(teamName, orgName, callback) {
   request
-    .get("https://api.github.com/orgs/" + options.org + "/teams")
+    .get("https://api.github.com/orgs/" + orgName + "/teams")
     .query({access_token: config.github.token})
     .query({per_page: 100})
     .set('Content-Type', 'application/json')
@@ -56,7 +56,7 @@ var addTeamUser = function addTeamUser(teamId, userName, callback, args){
     .end(function(res) {
       if(res.ok) {
         console.log("user:" + userName + " has been added to team:" + teamId);
-        callback.apply(this, args)
+        // callback.apply(this, args)
       } else {
         console.log(res.body);
       }
@@ -280,40 +280,8 @@ module.exports = function(program) {
     .option('-t, --team <teamname>', 'GitHub Team')
     .option('-u, --user <username>', 'GitHub Username')
     .action(function(options){
-      request
-        .get("https://api.github.com/orgs/" + options.org + "/teams")
-        .query({access_token: config.github.token})
-        .query({per_page: 100})
-        .set('Content-Type', 'application/json')
-        .end(function(res) {
-          if(res.ok) {
-            console.log("...got first 100 teams")
-            // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
-            var teamArray = res.body;
-            var teamId;
-            for(var i = 0; i < teamArray.length; i++){
-              var teamObj = teamArray[i];
-              for (var prop in teamObj) {
-                if (teamObj.hasOwnProperty("name") && teamObj.name === options.team) {
-                  teamId = teamObj.id;
-                  break;
-                }
-              }
-            }
-            request
-              .put("https://api.github.com/teams/" + teamId + "/members/" + options.user)
-              .query({access_token: config.github.token})
-              .set('Content-Type', 'application/json')
-              .end(function(res) {
-                if(res.ok) {
-                  console.log("user:" + options.user + " has been added to team:" + options.team + " in org:" + options.org);
-                } else {
-                  console.log(res.body);
-                }
-              });
-          } else {
-            console.log(res.body)
-          }
-        });
+      getTeamId(options.team, options.org, function(teamId){
+        addTeamUser(teamId, options.user)
+      });
     });
 };
