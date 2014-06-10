@@ -5,7 +5,7 @@ GitHub Interface - a minimal command line tool
 
 Simple command line tool created to automate the repetative GitHub operations I perform regularly.
 
-## Development
+## Development Installation
 
 If you'd like to contribute to the repo:
   1. clone down the repo
@@ -22,9 +22,9 @@ If you'd like to contribute to the repo:
     ```
   1. start hacking!
 
-## Installation
+## Normal Installation
 
-To install ghi from npm, run:
+If you're not insterested in contributing right now, just use npm to install ghi:
 
 ```
 $ npm install -g ghi
