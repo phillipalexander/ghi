@@ -8,49 +8,6 @@ var fs = require('fs');
 var path = require('path');
 var open = require('open');
 
-var getTeamId = function getTeamId(teamName, orgName, callback) {
-  request
-    .get("https://api.github.com/orgs/" + orgName + "/teams")
-    .query({access_token: program.config.github.token})
-    .query({per_page: 100})
-    .set('Content-Type', 'application/json')
-    .end(function(res) {
-      if(res.ok) {
-        console.log("...got first 100 teams")
-        // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
-        var teamArray = res.body;
-        var teamId;
-        for(var i = 0; i < teamArray.length; i++){
-          var teamObj = teamArray[i];
-          for (var prop in teamObj) {
-            if (teamObj.hasOwnProperty("name") && teamObj.name === teamName) {
-              teamId = teamObj.id;
-              break;
-            }
-          }
-        }
-        callback.apply(this, [teamId]);
-      } else {
-        console.log(res.body)
-      }
-    });
-}
-
-var addTeamUser = function addTeamUser(teamId, userName, callback, args){
-  request
-    .put("https://api.github.com/teams/" + teamId + "/members/" + userName)
-    .query({access_token: program.config.github.token})
-    .set('Content-Type', 'application/json')
-    .end(function(res) {
-      if(res.ok) {
-        console.log("user:" + userName + " has been added to team:" + teamId);
-        // callback.apply(this, args)
-      } else {
-        console.log(res.body);
-      }
-    });
-}
-
 module.exports = function(program) {
 
   // Example Usage: ghi rc macroscope/blog
@@ -162,33 +119,6 @@ module.exports = function(program) {
         });
     })
 
-  // Example Usage: ghi rta macroscope/blog
-  program
-    .command('rta <orgname\/reponame>')
-    .version('0.0.2')
-    .description('Repo Team Add: Add all teams listed in config.json to an existing repo')
-    .action(function(args){
-      var owner = args.split("/")[0];
-      var repo = args.split("/")[1];
-      var addRepoToTeam = function(team) {
-        request
-          .put("https://api.github.com/teams/" + team.id + "/repos/" + owner + "/" + repo)
-          .query({access_token: program.config.github.token})
-          .set('Content-Type', 'application/json')
-          .end(function(res) {
-            if(res.ok) {
-              var hookId = res.body.id;
-              console.log(team.name + " granted access");
-            } else {
-              console.log(res.body);
-            }
-          });
-      }
-      for(var i = 0; i < config.github.teams.length; i++) {
-        addRepoToTeam(config.github.teams[i]);
-      }
-    })
-
   // Example Usage: ghi rga macroscope
   program
     .command('rga <orgname>')
@@ -224,55 +154,5 @@ module.exports = function(program) {
             console.log(res.body);
           }
         });
-    });
-
-  // Example Usage: ghi tga macroscope
-  program
-    .command('tga <orgname>')
-    .version('0.0.2')
-    .description('Team Get All: Get the first 100 teams associated with an Org')
-    .action(function(org){
-      var owner = org;
-      request
-        .get("https://api.github.com/orgs/" + owner + "/teams")
-        .query({access_token: program.config.github.token})
-        .query({per_page: 100})
-        .set('Content-Type', 'application/json')
-        .end(function(res) {
-          if(res.ok) {
-            // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
-            var teamArray = res.body;
-            var result = [];
-            for(var i = 0; i < teamArray.length; i++){
-              var teamObj = teamArray[i];
-              var teamObjRedux = {};
-              for (var prop in teamObj) {
-                if (prop === "name") {
-                  teamObjRedux[prop] = teamObj[prop];
-                }
-                if (prop === "id") {
-                  teamObjRedux[prop] = teamObj[prop];
-                }
-              }
-              result.push(teamObjRedux);
-            }
-            console.log(result);
-          } else {
-            console.log(res.body);
-          }
-        });
-    });
-
-  // Example Usage: ghi tua -o "macroscope" -t "Team alexis" -u "alexanderphillip"
-  program
-    .command('tua')
-    .description('Team User Add: Add a GitHub user to an existing team ')
-    .option('-o, --org <orgname>', 'GitHub Org')
-    .option('-t, --team <teamname>', 'GitHub Team')
-    .option('-u, --user <username>', 'GitHub Username')
-    .action(function(options){
-      getTeamId(options.team, options.org, function(teamId){
-        addTeamUser(teamId, options.user)
-      });
     });
 };

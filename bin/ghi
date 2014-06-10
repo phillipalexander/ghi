@@ -30,6 +30,7 @@ program
   });
 
 require('../cmds/repo.js')(program);
+require('../cmds/team.js')(program);
 
 program
   .parse(process.argv);

@@ -43,7 +43,9 @@ To use the ghi tool, you must configure the config.json file in the root directo
 
 ## Commands
 
-### rc (Repo Create)
+### Repo Commands
+
+#### rc (Repo Create)
 
 ```sh
 Usage: rc <orgname/reponame>
@@ -55,7 +57,7 @@ Options:
   -V, --version  output the version number
 ```
 
-### rd (Repo Destroy)
+#### rd (Repo Destroy)
 
 ```sh
 Usage: rd <orgname/reponame>
@@ -67,7 +69,7 @@ Options:
   -V, --version  output the version number
 ```
 
-### rha (Repo Hook Add)
+#### rha (Repo Hook Add)
 
 ```sh
 Usage: rha <orgname/reponame>
@@ -79,19 +81,7 @@ Options:
   -V, --version  output the version number
 ```
 
-### rta (Repo Team Add)
-
-```sh
-Usage: rta <orgname/reponame>
-Description: Repo Team Add: Add all teams listed in config.json to an existing repo
-Example: ghi rta macroscope/blog
-Options:
-
-  -h, --help     output usage information
-  -V, --version  output the version number
-```
-
-### rga (Repo Get All)
+#### rga (Repo Get All)
 
 ```sh
 Usage: rga <orgname>
@@ -103,7 +93,9 @@ Options:
   -V, --version  output the version number
 ```
 
-### tga (Team Get All)
+### Team Commands
+
+#### tga (Team Get All)
 
 ```sh
 Usage: tga <orgname>
@@ -115,7 +107,7 @@ Options:
   -V, --version  output the version number
 ```
 
-### tua (Team User Add)
+#### tua (Team User Add)
 
 ```sh
 Usage: tua [options]
@@ -124,9 +116,23 @@ Example: ghi tua -o "macroscope" -t "awesome force" -u "jasper"
 Options:
 
   -h, --help             output usage information
-  -o, --org <orgname>    GitHub Org
-  -t, --team <teamname>  GitHub Team
-  -u, --user <username>  GitHub Username
+  -o, --org <orgname>    GitHub OrgName
+  -t, --team <teamname>  GitHub TeamName
+  -u, --user <username>  GitHub UserName
+```
+
+#### tra (Team Repo Add)
+
+```sh
+Usage: tra [options]
+Description: Team Repo Add: Add a GitHub repo to an existing team
+Example: ghi tra -o "macroscope" -t "awesome force" -r "blog"
+Options:
+
+  -h, --help             output usage information
+  -o, --org <orgname>    GitHub OrgName
+  -t, --team <teamname>  GitHub TeamName
+  -u, --repo <reponame>  GitHub RepoName
 ```
 
 For additional usage instructions, run
