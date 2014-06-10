@@ -124,7 +124,7 @@ module.exports = function(program) {
       });
     });
 
-  // Example Usage: ghi tra -o "macroscope" -t "Team alexis" -u "alexanderphillip"
+  // Example Usage: ghi tra -o "macroscope" -t "Team alexis" -r "blog"
   program
     .command('tra')
     .description('Team Repo Add: Add a GitHub repo to an existing team')
