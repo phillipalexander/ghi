@@ -19,9 +19,8 @@ if (fs.existsSync(path.join(__dirname, '../config.json'))) {
 }
 
 program
-  .version('0.0.1');
-
-require('../cmds/repo.js')(program);
+  .version('0.0.1')
+  .option('-c, --config [object]', 'configuration object', config);
 
 program
   .on('*', function(name) {
@@ -29,6 +28,8 @@ program
     program.outputHelp();
     process.exit(1);
   });
+
+require('../cmds/repo.js')(program);
 
 program
   .parse(process.argv);

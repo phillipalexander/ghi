@@ -11,7 +11,7 @@ var open = require('open');
 var getTeamId = function getTeamId(teamName, orgName, callback) {
   request
     .get("https://api.github.com/orgs/" + orgName + "/teams")
-    .query({access_token: config.github.token})
+    .query({access_token: program.config.github.token})
     .query({per_page: 100})
     .set('Content-Type', 'application/json')
     .end(function(res) {
@@ -39,7 +39,7 @@ var getTeamId = function getTeamId(teamName, orgName, callback) {
 var addTeamUser = function addTeamUser(teamId, userName, callback, args){
   request
     .put("https://api.github.com/teams/" + teamId + "/members/" + userName)
-    .query({access_token: config.github.token})
+    .query({access_token: program.config.github.token})
     .set('Content-Type', 'application/json')
     .end(function(res) {
       if(res.ok) {
@@ -73,7 +73,7 @@ module.exports = function(program) {
       // first try to create as org
       request
         .post("https://api.github.com/orgs/" + owner + "/repos")
-        .query({access_token: config.github.token})
+        .query({access_token: program.config.github.token})
         .set('Content-Type', 'application/json')
         .send(repoData)
         .end(function(res) {
@@ -83,7 +83,7 @@ module.exports = function(program) {
             // set webhook (only on org)
             request
               .post("https://api.github.com/repos/" + owner + "/" + repo + "/hooks")
-              .query({access_token: config.github.token})
+              .query({access_token: program.config.github.token})
               .set('Content-Type', 'application/json')
               .send(config.github.webhook)
               .end(function(res) {
@@ -100,7 +100,7 @@ module.exports = function(program) {
             // if creating as an org fails, try as user
             request
               .post("https://api.github.com/user/repos")
-              .query({access_token: config.github.token})
+              .query({access_token: program.config.github.token})
               .set('Content-Type', 'application/json')
               .send(repoData)
               .end(function(res) {
@@ -127,7 +127,7 @@ module.exports = function(program) {
 
       request
         .del("https://api.github.com/repos/" + org + "/" + repo)
-        .query({access_token: config.github.token})
+        .query({access_token: program.config.github.token})
         .set('Content-Type', 'application/json')
         .end(function(res) {
           if(res.ok) {
@@ -149,7 +149,7 @@ module.exports = function(program) {
 
       request
         .post("https://api.github.com/repos/" + owner + "/" + repo + "/hooks")
-        .query({access_token: config.github.token})
+        .query({access_token: program.config.github.token})
         .set('Content-Type', 'application/json')
         .send(config.github.webhook)
         .end(function(res) {
@@ -173,7 +173,7 @@ module.exports = function(program) {
       var addRepoToTeam = function(team) {
         request
           .put("https://api.github.com/teams/" + team.id + "/repos/" + owner + "/" + repo)
-          .query({access_token: config.github.token})
+          .query({access_token: program.config.github.token})
           .set('Content-Type', 'application/json')
           .end(function(res) {
             if(res.ok) {
@@ -198,7 +198,7 @@ module.exports = function(program) {
       var owner = org;
       request
         .get("https://api.github.com/orgs/" + owner + "/repos")
-        .query({access_token: config.github.token})
+        .query({access_token: program.config.github.token})
         .query({per_page: 100})
         .set('Content-Type', 'application/json')
         .end(function(res) {
@@ -235,7 +235,7 @@ module.exports = function(program) {
       var owner = org;
       request
         .get("https://api.github.com/orgs/" + owner + "/teams")
-        .query({access_token: config.github.token})
+        .query({access_token: program.config.github.token})
         .query({per_page: 100})
         .set('Content-Type', 'application/json')
         .end(function(res) {
