@@ -10,6 +10,7 @@ var open = require('open');
 
 var config;
 
+// Search for the config.json file in the current directory
 if (fs.existsSync(path.join(__dirname, '../config.json'))) {
   config = require('../config.json');
 } else {
@@ -19,16 +20,59 @@ if (fs.existsSync(path.join(__dirname, '../config.json'))) {
   process.exit();
 }
 
+var getTeamId = function getTeamId(teamName, callback) {
+  request
+    .get("https://api.github.com/orgs/" + options.org + "/teams")
+    .query({access_token: config.github.token})
+    .query({per_page: 100})
+    .set('Content-Type', 'application/json')
+    .end(function(res) {
+      if(res.ok) {
+        console.log("...got first 100 teams")
+        // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
+        var teamArray = res.body;
+        var teamId;
+        for(var i = 0; i < teamArray.length; i++){
+          var teamObj = teamArray[i];
+          for (var prop in teamObj) {
+            if (teamObj.hasOwnProperty("name") && teamObj.name === teamName) {
+              teamId = teamObj.id;
+              break;
+            }
+          }
+        }
+        callback.apply(this, [teamId]);
+      } else {
+        console.log(res.body)
+      }
+    });
+}
+
+var addTeamUser = function addTeamUser(teamId, userName, callback, args){
+  request
+    .put("https://api.github.com/teams/" + teamId + "/members/" + userName)
+    .query({access_token: config.github.token})
+    .set('Content-Type', 'application/json')
+    .end(function(res) {
+      if(res.ok) {
+        console.log("user:" + userName + " has been added to team:" + teamId);
+        callback.apply(this, args)
+      } else {
+        console.log(res.body);
+      }
+    });
+}
+
 module.exports = function(program) {
 
   program
-    .command("rc <fullname>")
+    .command("rc")
     .version("0.0.1")
-    .description("Create repo on GitHub")
+    .description("Repo Create: Create a repo on GitHub")
     // create repo
-    .action(function(fullname) {
-      var owner = fullname.split("/")[0];
-      var repo = fullname.split("/")[1];
+    .action(function(args) {
+      var owner = args.split("/")[0];
+      var repo = args.split("/")[1];
       var repoData = {
         name: repo,
         private: true,
@@ -84,12 +128,12 @@ module.exports = function(program) {
     });
 
   program
-    .command("rd <fullname>")
+    .command("rd")
     .version("0.0.1")
-    .description("Destroy repo on GitHub")
-    .action(function(fullname) {
-      var org = fullname.split("/")[0];
-      var repo = fullname.split("/")[1];
+    .description("Repo Destroy: Destroy a repo on GitHub")
+    .action(function(args) {
+      var org = args.split("/")[0];
+      var repo = args.split("/")[1];
 
       request
         .del("https://api.github.com/repos/" + org + "/" + repo)
@@ -105,12 +149,12 @@ module.exports = function(program) {
     });
 
   program
-    .command('rha <fullname>')
+    .command('rha')
     .version('0.0.1')
-    .description('Create a webhook on a repo')
-    .action(function(fullname){
-      var owner = fullname.split("/")[0];
-      var repo = fullname.split("/")[1];
+    .description('Repo Hook Add: Add webhook defined in config.json to a repo')
+    .action(function(args){
+      var owner = args.split("/")[0];
+      var repo = args.split("/")[1];
 
       request
         .post("https://api.github.com/repos/" + owner + "/" + repo + "/hooks")
@@ -127,13 +171,14 @@ module.exports = function(program) {
         });
     })
 
+  // Example Usage: ghi rta macroscope
   program
-    .command('rta <fullname>')
+    .command('rta')
     .version('0.0.1')
-    .description('Add all teams listed in config.json to an existing repo')
-    .action(function(fullname){
-      var owner = fullname.split("/")[0];
-      var repo = fullname.split("/")[1];
+    .description('Repo Team Add: Add all teams listed in config.json to an existing repo')
+    .action(function(args){
+      var owner = args.split("/")[0];
+      var repo = args.split("/")[1];
       var addRepoToTeam = function(team) {
         request
           .put("https://api.github.com/teams/" + team.id + "/repos/" + owner + "/" + repo)
@@ -153,46 +198,11 @@ module.exports = function(program) {
       }
     })
 
+  // Example Usage: ghi rga macroscope
   program
-    .command('tga <org>')
+    .command('rga')
     .version('0.0.1')
-    .description('Get the first 100 teams associated with an Org')
-    .action(function(org){
-      var owner = org;
-      request
-        .get("https://api.github.com/orgs/" + owner + "/teams")
-        .query({access_token: config.github.token})
-        .query({per_page: 100})
-        .set('Content-Type', 'application/json')
-        .end(function(res) {
-          if(res.ok) {
-            // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
-            var teamArray = res.body;
-            var result = [];
-            for(var i = 0; i < teamArray.length; i++){
-              var teamObj = teamArray[i];
-              var teamObjRedux = {};
-              for (var prop in teamObj) {
-                if (prop === "name") {
-                  teamObjRedux[prop] = teamObj[prop];
-                }
-                if (prop === "id") {
-                  teamObjRedux[prop] = teamObj[prop];
-                }
-              }
-              result.push(teamObjRedux);
-            }
-            console.log(result);
-          } else {
-            console.log(res.body);
-          }
-        });
-    });
-
-  program
-    .command('rga <org>')
-    .version('0.0.1')
-    .description('Get the first 100 repos associated with an Org')
+    .description('Repo Get All: Get the first 100 repos associated with an Org')
     .action(function(org){
       var owner = org;
       request
@@ -225,10 +235,48 @@ module.exports = function(program) {
         });
     });
 
+  // Example Usage: ghi tga macroscope
   program
-    .command('uqa')
-    .description('User Quick Add')
-    .option('-o, --org <string>', 'GitHub Org')
+    .command('tga')
+    .version('0.0.1')
+    .description('Team Get All: Get the first 100 teams associated with an Org')
+    .action(function(org){
+      var owner = org;
+      request
+        .get("https://api.github.com/orgs/" + owner + "/teams")
+        .query({access_token: config.github.token})
+        .query({per_page: 100})
+        .set('Content-Type', 'application/json')
+        .end(function(res) {
+          if(res.ok) {
+            // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
+            var teamArray = res.body;
+            var result = [];
+            for(var i = 0; i < teamArray.length; i++){
+              var teamObj = teamArray[i];
+              var teamObjRedux = {};
+              for (var prop in teamObj) {
+                if (prop === "name") {
+                  teamObjRedux[prop] = teamObj[prop];
+                }
+                if (prop === "id") {
+                  teamObjRedux[prop] = teamObj[prop];
+                }
+              }
+              result.push(teamObjRedux);
+            }
+            console.log(result);
+          } else {
+            console.log(res.body);
+          }
+        });
+    });
+
+  // Example Usage: ghi tua -o "macroscope" -t "Team alexis" -u "alexanderphillip"
+  program
+    .command('tua')
+    .description('Team User Add: Add a GitHub user to an existing team ')
+    .option('-o, --org <orgname>', 'GitHub Org')
     .option('-t, --team <teamname>', 'GitHub Team')
     .option('-u, --user <username>', 'GitHub Username')
     .action(function(options){
@@ -239,7 +287,7 @@ module.exports = function(program) {
         .set('Content-Type', 'application/json')
         .end(function(res) {
           if(res.ok) {
-            console.log("...got teams")
+            console.log("...got first 100 teams")
             // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
             var teamArray = res.body;
             var teamId;
@@ -267,5 +315,5 @@ module.exports = function(program) {
             console.log(res.body)
           }
         });
-      })
+    });
 };

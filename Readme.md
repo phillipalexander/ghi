@@ -39,7 +39,22 @@ $ npm install -g ghi
 
 ## Usage
 
-_Coming Soon_
+  Usage: ghi [options] [command]
+
+  Commands:
+
+    rc <fullname> Create repo on GitHub
+    rd <fullname> Destroy repo on GitHub
+    rha <fullname> Create a webhook on a repo
+    rta <fullname> Add all teams listed in config.json to an existing repo
+    tga <org>    Get the first 100 teams associated with an Org
+    rga <org>    Get the first 100 repos associated with an Org
+    uqa          User Quick Add
+
+  Options:
+
+    -h, --help     output usage information
+    -V, --version  output the version number
 
 ```
 ghi --help
