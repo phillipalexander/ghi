@@ -8,19 +8,6 @@ var fs = require('fs');
 var path = require('path');
 var open = require('open');
 
-var config;
-
-// Search for the config.json file in the current directory
-if (fs.existsSync(path.join(__dirname, '../config.json'))) {
-  config = require('../config.json');
-} else {
-  console.log('You must set your GitHub token');
-  console.log('Create a token using the GitHub web interface that has admin:org access');
-  console.log('Run the following command to create a config.json file, add your token, then try again.');
-  console.log('cp ' + path.join(__dirname, '../config.json.example') + ' ' + path.join(__dirname, '../config.json') + ' && vim ' + path.join(__dirname, '../config.json'));
-  process.exit();
-}
-
 var getTeamId = function getTeamId(teamName, orgName, callback) {
   request
     .get("https://api.github.com/orgs/" + orgName + "/teams")
