@@ -65,9 +65,10 @@ var addTeamUser = function addTeamUser(teamId, userName, callback, args){
 
 module.exports = function(program) {
 
+  // Example Usage: ghi rc macroscope/blog
   program
-    .command("rc")
-    .version("0.0.1")
+    .command("rc <orgname\/reponame>")
+    .version("0.0.2")
     .description("Repo Create: Create a repo on GitHub")
     // create repo
     .action(function(args) {
@@ -127,9 +128,10 @@ module.exports = function(program) {
         });
     });
 
+  // Example Usage: ghi rd macroscope/blog
   program
-    .command("rd")
-    .version("0.0.1")
+    .command("rd <orgname\/reponame>")
+    .version("0.0.2")
     .description("Repo Destroy: Destroy a repo on GitHub")
     .action(function(args) {
       var org = args.split("/")[0];
@@ -148,9 +150,10 @@ module.exports = function(program) {
         });
     });
 
+  // Example Usage: ghi rha macroscope/blog
   program
-    .command('rha')
-    .version('0.0.1')
+    .command('rha <orgname\/reponame>')
+    .version('0.0.2')
     .description('Repo Hook Add: Add webhook defined in config.json to a repo')
     .action(function(args){
       var owner = args.split("/")[0];
@@ -171,10 +174,10 @@ module.exports = function(program) {
         });
     })
 
-  // Example Usage: ghi rta macroscope
+  // Example Usage: ghi rta macroscope/blog
   program
-    .command('rta')
-    .version('0.0.1')
+    .command('rta <orgname\/reponame>')
+    .version('0.0.2')
     .description('Repo Team Add: Add all teams listed in config.json to an existing repo')
     .action(function(args){
       var owner = args.split("/")[0];
@@ -200,8 +203,8 @@ module.exports = function(program) {
 
   // Example Usage: ghi rga macroscope
   program
-    .command('rga')
-    .version('0.0.1')
+    .command('rga <orgname>')
+    .version('0.0.2')
     .description('Repo Get All: Get the first 100 repos associated with an Org')
     .action(function(org){
       var owner = org;
@@ -237,8 +240,8 @@ module.exports = function(program) {
 
   // Example Usage: ghi tga macroscope
   program
-    .command('tga')
-    .version('0.0.1')
+    .command('tga <orgname>')
+    .version('0.0.2')
     .description('Team Get All: Get the first 100 teams associated with an Org')
     .action(function(org){
       var owner = org;
