@@ -57,8 +57,10 @@ module.exports = function(program) {
             if (program.config.github.webhook !== "WEBHOOK_CONFIG_OBJECT" && typeof program.config.github.webhook === "object") {
               addRepoWebHook(owner, repo);
             };
-            console.log("opening url in browser...");
-            open(res.body.html_url);
+            if(program.config.settings.openurls){
+              console.log("opening url in browser...");
+              open(res.body.html_url);
+            }
           } else if (res.notFound) {
 
             // if creating as an org fails, try as user
@@ -70,8 +72,10 @@ module.exports = function(program) {
               .end(function(res) {
                 if(res.ok) {
                   console.log("url: " + res.body.html_url);
+                if(program.config.settings.openurls){
                   console.log("opening url in browser...");
                   open(res.body.html_url);
+                }
                 } else {
                   console.log(res.body);
                 }

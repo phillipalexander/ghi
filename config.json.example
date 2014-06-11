@@ -2,5 +2,8 @@
   "github": {
     "token": "OAUTH_TOKEN",
     "webhook": "WEBHOOK_CONFIG_OBJECT"
+  },
+  "settings": {
+    "openurls": false
   }
 }
