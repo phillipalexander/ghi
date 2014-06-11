@@ -10,6 +10,24 @@ var open = require('open');
 
 module.exports = function(program) {
 
+  var addRepoWebHook = function addRepoWebHook(ownerName, repoName, callback, args){
+    request
+      .post("https://api.github.com/repos/" + ownerName + "/" + repoName + "/hooks")
+      .query({access_token: program.config.github.token})
+      .set('Content-Type', 'application/json')
+      .send(program.config.github.webhook)
+      .end(function(res) {
+        if(res.ok) {
+          console.log("webhook set: " + program.config.github.webhook.name);
+          if(callback !== undefined && callback !== null) {
+            callback.apply(this, args);
+          }
+        } else {
+          console.log(res.body);
+        }
+      });
+  }
+
   // Example Usage: ghi rc macroscope/blog
   program
     .command("rc <orgname\/reponame>")
@@ -36,20 +54,9 @@ module.exports = function(program) {
         .end(function(res) {
           if(res.ok) {
             console.log("url: " + res.body.html_url);
-
-            // set webhook (only on org)
-            request
-              .post("https://api.github.com/repos/" + owner + "/" + repo + "/hooks")
-              .query({access_token: program.config.github.token})
-              .set('Content-Type', 'application/json')
-              .send(config.github.webhook)
-              .end(function(res) {
-                if(res.ok) {
-                  console.log("webhook set");
-                } else {
-                  console.log(res.body);
-                }
-              });
+            if (program.config.github.webhook !== "WEBHOOK_CONFIG_OBJECT" && typeof program.config.github.webhook === "object") {
+              addRepoWebHook(owner, repo);
+            };
             console.log("opening url in browser...");
             open(res.body.html_url);
           } else if (res.notFound) {
@@ -69,6 +76,8 @@ module.exports = function(program) {
                   console.log(res.body);
                 }
               });
+          } else {
+            console.log(res.body);
           }
         });
     });
