@@ -39,13 +39,27 @@ $ npm install -g ghi
 
 ## Configuration
 
-To use the ghi tool, you must configure the config.json file in the root directory. To do so, run any of the commands below and follow the instructions.
+To use the ghi tool, you must configure the config.json file in the root directory. To do so, run any of the commands below and follow the instructions when prompted.
+
+The default configuration file contains the following:
+
+```json
+{
+  "github": {
+    "token": "OAUTH_TOKEN",
+    "webhook": "WEBHOOK_CONFIG_OBJECT"
+  },
+  "settings": {
+    "openurls": false
+  }
+}
+```
 
 ## Commands
 
 ### Repo Commands
 
-#### rc (Repo Create)
+#### rc (repo create)
 
 ```sh
 Usage: rc <orgname/reponame>
@@ -57,7 +71,9 @@ Options:
   -V, --version  output the version number
 ```
 
-#### rd (Repo Destroy)
+**Note:** If `settings.openurls = true`, when running `ghi rc <orgname>/reponame>` the resulting github page will be opened automatically in your default browser.
+
+#### rd (repo destroy)
 
 ```sh
 Usage: rd <orgname/reponame>
@@ -69,7 +85,7 @@ Options:
   -V, --version  output the version number
 ```
 
-#### rha (Repo Hook Add)
+#### rha (repo hook add)
 
 ```sh
 Usage: rha <orgname/reponame>
@@ -81,7 +97,7 @@ Options:
   -V, --version  output the version number
 ```
 
-#### rga (Repo Get All)
+#### rga (repo get all)
 
 ```sh
 Usage: rga <orgname>
@@ -95,7 +111,7 @@ Options:
 
 ### Team Commands
 
-#### tga (Team Get All)
+#### tga (team get all)
 
 ```sh
 Usage: tga <orgname>
@@ -107,7 +123,7 @@ Options:
   -V, --version  output the version number
 ```
 
-#### tua (Team User Add)
+#### tua (team user add)
 
 ```sh
 Usage: tua [options]
@@ -121,7 +137,7 @@ Options:
   -u, --user <username>  GitHub UserName
 ```
 
-#### tra (Team Repo Add)
+#### tra (team repo add)
 
 ```sh
 Usage: tra [options]
