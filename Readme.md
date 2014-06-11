@@ -71,7 +71,9 @@ Options:
   -V, --version  output the version number
 ```
 
-**Note:** If `settings.openurls = true`, when running `ghi rc <orgname>/reponame>` the resulting github page will be opened automatically in your default browser.
+##### Things to Note:
+  - If `settings.openurls = true` in `config.json`, when running `ghi rc <orgname>/reponame>` the resulting github page will be opened automatically in your default browser.
+  - If you replace `"WEBHOOK_CONFIG_OBJECT"` in `config.json` with a properly formated GitHub webhook configuration object, when running `ghi rc <orgname>/reponame>` that webhook will automatically be set on all repos created within orgs.
 
 #### rd (repo destroy)
 
