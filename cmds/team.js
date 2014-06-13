@@ -7,7 +7,7 @@ var request = require("superagent");
 var fs = require('fs');
 var path = require('path');
 var open = require('open');
-
+var inquirer = require("inquirer");
 
 
 module.exports = function(program) {

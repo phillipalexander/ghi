@@ -7,6 +7,8 @@ var request = require("superagent");
 var fs = require('fs');
 var path = require('path');
 var open = require('open');
+var inquirer = require("inquirer");
+
 
 module.exports = function(program) {
 
@@ -94,18 +96,30 @@ module.exports = function(program) {
     .action(function(args) {
       var org = args.split("/")[0];
       var repo = args.split("/")[1];
+      var questions = [{
+        type: "confirm",
+        name: "repoDestroyConfirm",
+        message: "Are you sure you want to permanently delete " + args + " from GitHub?",
+        default: false
+      }];
+      inquirer.prompt(questions, function(answer) {
+        if (answer.repoDestroyConfirm === true) {
+          request
+            .del("https://api.github.com/repos/" + org + "/" + repo)
+            .query({access_token: program.config.github.token})
+            .set('Content-Type', 'application/json')
+            .end(function(res) {
+              if(res.ok) {
+                console.log("...annnnd, it's gone.");
+              } else {
+                console.log(res.body);
+              }
+            });
+        } else {
+          console.log("...aborting.")
+        }
+      });
 
-      request
-        .del("https://api.github.com/repos/" + org + "/" + repo)
-        .query({access_token: program.config.github.token})
-        .set('Content-Type', 'application/json')
-        .end(function(res) {
-          if(res.ok) {
-            console.log("...annnnd, it's gone.");
-          } else {
-            console.log(res.body);
-          }
-        });
     });
 
   // Example Usage: ghi rha macroscope/blog
