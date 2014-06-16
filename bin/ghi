@@ -5,22 +5,8 @@ var program = require('commander');
 var fs = require('fs');
 var path = require('path');
 
-var config;
-
-// Search for the config.json file in the current directory
-if (fs.existsSync(path.join(__dirname, '../config.json'))) {
-  config = require('../config.json');
-} else {
-  console.log('You must set your GitHub token');
-  console.log('Create a token using the GitHub web interface that has admin:org access');
-  console.log('Run the following command to create a config.json file, add your token, then try again.');
-  console.log('cp ' + path.join(__dirname, '../config.json.example') + ' ' + path.join(__dirname, '../config.json') + ' && vim ' + path.join(__dirname, '../config.json'));
-  process.exit();
-}
-
 program
   .version('0.0.1')
-  .option('-c, --config [object]', 'configuration object', config);
 
 program
   .on('*', function(name) {
@@ -29,6 +15,7 @@ program
     process.exit(1);
   });
 
+require('../cmds/config.js')(program);
 require('../cmds/repo.js')(program);
 require('../cmds/team.js')(program);
 

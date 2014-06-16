@@ -57,6 +57,20 @@ The default configuration file contains the following:
 
 ## Commands
 
+### Configuration Commands
+
+#### c (configure)
+
+```sh
+Usage: c
+Description: Configure: edit application settings
+Example: ghi c
+Options:
+
+  -h, --help     output usage information
+  -V, --version  output the version number
+```
+
 ### Repo Commands
 
 #### rc (repo create)

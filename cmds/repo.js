@@ -6,8 +6,8 @@
 var request = require("superagent");
 var fs = require('fs');
 var path = require('path');
-var open = require('open');
 var inquirer = require("inquirer");
+var shell = require('shelljs');
 
 
 module.exports = function(program) {
@@ -61,7 +61,7 @@ module.exports = function(program) {
             };
             if(program.config.settings.openurls){
               console.log("opening url in browser...");
-              open(res.body.html_url);
+              shell.exec('open ' + res.body.html_url);
             }
           } else if (res.notFound) {
 
@@ -76,7 +76,7 @@ module.exports = function(program) {
                   console.log("url: " + res.body.html_url);
                 if(program.config.settings.openurls){
                   console.log("opening url in browser...");
-                  open(res.body.html_url);
+                  shell.exec('open ' + res.body.html_url);
                 }
                 } else {
                   console.log(res.body);

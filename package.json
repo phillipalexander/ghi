@@ -1,6 +1,6 @@
 {
   "name": "ghi",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "GitHub Interface",
   "private": false,
   "bin": {
@@ -22,7 +22,7 @@
   "dependencies": {
     "commander": "~2.0.0",
     "inquirer": "^0.5.1",
-    "open": "0.0.5",
+    "shelljs": "^0.3.0",
     "superagent": "~0.18.0"
   },
   "devDependencies": {}
