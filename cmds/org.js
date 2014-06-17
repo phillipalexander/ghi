@@ -7,7 +7,7 @@ var request = require("superagent");
 
 module.exports = function(program) {
 
-  // Example Usage: ghi rga macroscope
+  // Example Usage: ghi ogr macroscope
   program
     .command('ogr <orgname>')
     .version('0.0.2')
@@ -44,7 +44,7 @@ module.exports = function(program) {
         });
     });
 
-  // Example Usage: ghi tga macroscope
+  // Example Usage: ghi ogt macroscope
   program
     .command('ogt <orgname>')
     .version('0.0.2')

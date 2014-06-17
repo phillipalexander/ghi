@@ -113,31 +113,7 @@ Options:
   -V, --version  output the version number
 ```
 
-#### rga (repo get all)
-
-```sh
-Usage: rga <orgname>
-Description: Repo Get All: Get the first 100 repos associated with an Org
-Example: ghi rga macroscope
-Options:
-
-  -h, --help     output usage information
-  -V, --version  output the version number
-```
-
 ### Team Commands
-
-#### tga (team get all)
-
-```sh
-Usage: tga <orgname>
-Description: Team Get All: Get the first 100 teams associated with an Org
-Example: ghi tga macroscope
-Options:
-
-  -h, --help     output usage information
-  -V, --version  output the version number
-```
 
 #### tua (team user add)
 
@@ -165,6 +141,32 @@ Options:
   -o, --org <orgname>    GitHub OrgName
   -t, --team <teamname>  GitHub TeamName
   -u, --repo <reponame>  GitHub RepoName
+```
+
+### Org Commands
+
+#### ogt (team get all)
+
+```sh
+Usage: ogt <orgname>
+Description: Org Get Teams: Get the first 100 teams associated with an Org
+Example: ghi ogt macroscope
+Options:
+
+  -h, --help     output usage information
+  -V, --version  output the version number
+```
+
+#### ogr (org get repos)
+
+```sh
+Usage: ogr <orgname>
+Description: Org Get Repos: Get the first 100 repos associated with an Org
+Example: ghi ogr macroscope
+Options:
+
+  -h, --help     output usage information
+  -V, --version  output the version number
 ```
 
 For additional usage instructions, run
