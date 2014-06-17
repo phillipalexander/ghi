@@ -18,6 +18,7 @@ program
 require('../cmds/config.js')(program);
 require('../cmds/repo.js')(program);
 require('../cmds/team.js')(program);
+require('../cmds/org.js')(program);
 
 program
   .parse(process.argv);

@@ -73,43 +73,6 @@ module.exports = function(program) {
       });
   }
 
-  // Example Usage: ghi tga macroscope
-  program
-    .command('tga <orgname>')
-    .version('0.0.2')
-    .description('Team Get All: Get the first 100 teams associated with an Org')
-    .action(function(org){
-      var owner = org;
-      request
-        .get("https://api.github.com/orgs/" + owner + "/teams")
-        .query({access_token: program.config.github.token})
-        .query({per_page: 100})
-        .set('Content-Type', 'application/json')
-        .end(function(res) {
-          if(res.ok) {
-            // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
-            var teamArray = res.body;
-            var result = [];
-            for(var i = 0; i < teamArray.length; i++){
-              var teamObj = teamArray[i];
-              var teamObjRedux = {};
-              for (var prop in teamObj) {
-                if (prop === "name") {
-                  teamObjRedux[prop] = teamObj[prop];
-                }
-                if (prop === "id") {
-                  teamObjRedux[prop] = teamObj[prop];
-                }
-              }
-              result.push(teamObjRedux);
-            }
-            console.log(result);
-          } else {
-            console.log(res.body);
-          }
-        });
-    });
-
   // Example Usage: ghi tua -o "macroscope" -t "Team alexis" -u "alexanderphillip"
   program
     .command('tua')
