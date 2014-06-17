@@ -5,7 +5,6 @@
 
 var fs = require('fs');
 var path = require('path');
-var inquirer = require("inquirer");
 var shell = require('shelljs');
 
 
@@ -21,7 +20,7 @@ if (fs.existsSync(path.join(__dirname, '../config.json'))) {
   console.log('Create a token using the GitHub web interface that has admin:org access');
   console.log('Then run \'ghi c\' to open the config.json and add your token');
   process.exit();
-};
+}
 
 module.exports = function(program) {
 
