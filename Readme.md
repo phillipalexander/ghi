@@ -113,6 +113,20 @@ Options:
   -V, --version  output the version number
 ```
 
+#### rpn (repo patch name)
+
+```sh
+Usage: rpn [options]
+Description: Repo Patch Name: change the name of an existing repo
+Example: ghi rpn -o "macroscope" -r "venus" -p "mars"
+Options:
+
+  -h, --help               output usage information
+  -o, --org <orgname>      GitHub OrgName
+  -r, --repo <reponame>    GitHub RepoName
+  -p, --patch <patchdata>  Updated RepoName
+```
+
 ### Team Commands
 
 #### tua (team user add)

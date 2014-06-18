@@ -146,4 +146,27 @@ module.exports = function(program) {
         });
     })
 
+  // Example Usage: ghi rpn -o "macroscope" -r "venus" -p "mars"
+  program
+    .command('rpn')
+    .description('Repo Patch Name: change the name of an existing repo')
+    .option('-o, --org <orgname>', 'GitHub OrgName')
+    .option('-r, --repo <reponame>', 'GitHub RepoName')
+    .option('-p, --patch <patchdata>', 'Updated RepoName')
+    .action(function(options){
+
+      request
+        .patch('https://api.github.com/repos/' + options.org + '/' + options.repo)
+        .query({access_token: program.config.github.token})
+        .set('Content-Type', 'application/json')
+        .send({"name": options.patch})
+        .end(function(res) {
+          if(res.ok) {
+            console.log("name successfully updated");
+          } else {
+            console.log(res.body);
+          }
+        });
+
+    });
 };
