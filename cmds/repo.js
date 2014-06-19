@@ -44,7 +44,7 @@ module.exports = function(program) {
         private: true,
         has_issues: false,
         has_wiki: false,
-        auto_init: false
+        auto_init: true
       };
 
       // first try to create as org
@@ -122,28 +122,16 @@ module.exports = function(program) {
 
     });
 
-  // Example Usage: ghi rha macroscope/blog
+  // Example Usage: ghi rhc macroscope/blog
   program
-    .command('rha <orgname\/reponame>')
+    .command('rhc <orgname\/reponame>')
     .version('0.0.2')
-    .description('Repo Hook Add: Add webhook defined in config.json to a repo')
+    .description('Repo Hook Create: Add webhook defined in config.json to a repo')
     .action(function(args){
       var owner = args.split("/")[0];
       var repo = args.split("/")[1];
 
-      request
-        .post("https://api.github.com/repos/" + owner + "/" + repo + "/hooks")
-        .query({access_token: program.config.github.token})
-        .set('Content-Type', 'application/json')
-        .send(config.github.webhook)
-        .end(function(res) {
-          if(res.ok) {
-            var hookId = res.body.id;
-            console.log("webhook set");
-          } else {
-            console.log(res.body);
-          }
-        });
+      addRepoWebHook(owner, repo);
     })
 
   // Example Usage: ghi rpn -o "macroscope" -r "venus" -p "mars"

@@ -101,12 +101,12 @@ Options:
   -V, --version  output the version number
 ```
 
-#### rha (repo hook add)
+#### rhc (repo hook add)
 
 ```sh
-Usage: rha <orgname/reponame>
-Description: Repo Hook Add: Add webhook defined in config.json to a repo
-Example: ghi rha macroscope/blog
+Usage: rhc <orgname/reponame>
+Description: Repo Hook Create: Add webhook defined in config.json to a repo
+Example: ghi rhc macroscope/blog
 Options:
 
   -h, --help     output usage information
