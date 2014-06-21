@@ -44,7 +44,8 @@ module.exports = function(program) {
         private: true,
         has_issues: false,
         has_wiki: false,
-        auto_init: true
+        auto_init: true,
+        gitignore_template: "Yeoman"
       };
 
       // first try to create as org
