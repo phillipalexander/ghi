@@ -23,6 +23,7 @@
     "commander": "~2.0.0",
     "inquirer": "^0.5.1",
     "shelljs": "^0.3.0",
+    "sifter": "^0.3.3",
     "superagent": "~0.18.0"
   },
   "devDependencies": {}

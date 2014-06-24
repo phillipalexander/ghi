@@ -7,9 +7,40 @@ var request = require("superagent");
 var fs = require('fs');
 var path = require('path');
 var inquirer = require("inquirer");
+var Sifter = require("sifter")
 
 
 module.exports = function(program) {
+
+  var didYouMean = function(name, collection, callback) {
+    var sifter = new Sifter(collection);
+    var result = sifter.search(name, {
+      fields: ['name'],
+      limit: 1
+    });
+    var match = collection[result.items[0].id];
+    if (match.name !== name) {
+      var questions = [{
+        type: "confirm",
+        name: "didyoumean",
+        message: "Did you mean " + match.name + " ?",
+        default: false
+      }];
+      inquirer.prompt(questions, function(answer) {
+        if (answer.didyoumean === true) {
+          if (callback !== undefined && callback !== null) {
+            callback.apply(this, [match]);
+          }
+        } else {
+          console.log("Couldn't find a match.");
+        }
+      });
+    } else {
+      if (callback !== undefined && callback !== null) {
+        callback.apply(this, [match]);
+      }
+    }
+  };
 
   var getTeamId = function getTeamId(teamName, orgName, callback) {
     request
@@ -21,18 +52,7 @@ module.exports = function(program) {
         if(res.ok) {
           console.log("...got first 100 teams")
           // TODO: accomodate paginated results. This will only report page 1 (with 100 results)
-          var teamArray = res.body;
-          var teamId;
-          for(var i = 0; i < teamArray.length; i++){
-            var teamObj = teamArray[i];
-            for (var prop in teamObj) {
-              if (teamObj.hasOwnProperty("name") && teamObj.name === teamName) {
-                teamId = teamObj.id;
-                break;
-              }
-            }
-          }
-          callback.apply(this, [teamId]);
+          didYouMean(teamName, res.body, function(match){callback.apply(this, [match.id])})
         } else {
           console.log(res.body)
         }
