@@ -127,6 +127,20 @@ Options:
   -p, --patch <patchdata>  Updated RepoName
 ```
 
+#### rs (repo sync)
+
+```sh
+Usage: rs [options]
+Description: Repo Sync: sync a repo across owners using force push
+Example: ghi rs -s "macroscope" -t "phillipalexander" -r "mars"
+  Options:
+
+    -h, --help                       output usage information
+    -s, --ownersource <ownersource>  GitHub Source Owner
+    -t, --ownertarget <ownertarget>  GitHub Target Owner
+    -r, --reponame <reponame>        RepoName
+```
+
 ### Team Commands
 
 #### tua (team user add)

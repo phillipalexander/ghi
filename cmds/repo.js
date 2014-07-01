@@ -158,4 +158,34 @@ module.exports = function(program) {
         });
 
     });
+
+  // Example Usage: ghi rs -s "hackreactor-labs" -t "hackreactor" -r "hiring"
+  program
+    .command('rs')
+    .description('Repo Sync: sync a repo across owners using force push')
+    .option('-s, --ownersource <ownersource>', 'GitHub Source Owner')
+    .option('-t, --ownertarget <ownertarget>', 'GitHub Target Owner')
+    .option('-r, --reponame <reponame>', 'RepoName')
+    .action(function(options){
+
+      var sourceUrl = 'git@github.com:' + options.ownersource + '/' + options.reponame + '.git';
+      var targetUrl = 'git@github.com:' + options.ownertarget + '/' + options.reponame + '.git';
+      var tempPath = '/tmp/ghi/' + options.reponame;
+      shell.mkdir('-p', '/tmp/ghi');
+
+      if (!shell.which('git')) {
+        shell.echo('Sorry, this script requires git');
+        shell.exit(1);
+      }
+      if (shell.exec('git clone ' + sourceUrl + ' ' + tempPath).code !== 0) {
+        shell.echo('Error: Git clone failed');
+        shell.exit(1);
+      }
+      shell.cd(tempPath)
+      if (shell.exec('git push ' + targetUrl + ' -f').code !== 0) {
+        shell.echo('Error: Git push failed');
+        shell.exit(1);
+      }
+      shell.rm('-rf', tempPath);
+    });
 };
