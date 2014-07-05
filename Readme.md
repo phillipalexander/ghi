@@ -1,5 +1,5 @@
 # ghi
-GitHub Interface - a minimal command line tool
+GitHub Interface - an awesome command line tool
 
 ## Description
 
