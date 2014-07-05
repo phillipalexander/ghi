@@ -3,7 +3,7 @@ GitHub Interface - an awesome command line tool
 
 ## Description
 
-Simple command line tool created to automate the repetative GitHub operations I perform regularly.
+Simple command line tool created to automate the repetitive GitHub operations I perform regularly.
 
 ## Installation
 
