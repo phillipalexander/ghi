@@ -28,7 +28,25 @@ module.exports = function(program) {
           console.log(res.body);
         }
       });
-  }
+  };
+
+  var repoSubscribe = function repoSubscribe(ownerName, repoName, callback, args){
+    request
+      .put("https://api.github.com/repos/" + ownerName + "/" + repoName + "/subscription")
+      .query({access_token: program.config.github.token})
+      .set('Content-Type', 'application/json')
+      .send({"subscribed": "true"})
+      .end(function(res) {
+        if(res.ok) {
+          console.log("subscribed to " + ownerName + "/" + repoName);
+          if(callback !== undefined && callback !== null) {
+            callback.apply(this, args);
+          }
+        } else {
+          console.log(res.body);
+        }
+      });
+  };
 
   // Example Usage: ghi rc macroscope/blog
   program
@@ -57,6 +75,7 @@ module.exports = function(program) {
         .end(function(res) {
           if(res.ok) {
             console.log("url: " + res.body.html_url);
+            repoSubscribe(owner, repo);
             if (program.config.github.webhook !== "WEBHOOK_CONFIG_OBJECT" && typeof program.config.github.webhook === "object") {
               addRepoWebHook(owner, repo);
             };
@@ -75,6 +94,7 @@ module.exports = function(program) {
               .end(function(res) {
                 if(res.ok) {
                   console.log("url: " + res.body.html_url);
+                  repoSubscribe(owner, repo);
                 if(program.config.settings.openurls){
                   console.log("opening url in browser...");
                   shell.exec('open ' + res.body.html_url);
