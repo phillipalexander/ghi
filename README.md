@@ -31,7 +31,7 @@ If you'd like to contribute to the repo:
 
 ### Basic (you just want it to work)
 
-If you're not insterested in contributing right now, just use npm to install ghi:
+If you're not interested in contributing right now, just use npm to install ghi:
 
 ```
 $ npm install -g ghi
@@ -205,6 +205,6 @@ ghi --help
 
 ## License
 
-Copyright (c) 2014 Phillip Alexander
+Copyright (c) 2015 Phillip Alexander
 
 [MIT License](http://en.wikipedia.org/wiki/MIT_License)
